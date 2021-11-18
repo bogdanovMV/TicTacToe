@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "title": MessageLookupByLibrary.simpleMessage("Tic-Tac-Toe")
+        "prompt": MessageLookupByLibrary.simpleMessage("Player turn "),
+        "title": MessageLookupByLibrary.simpleMessage("Tic-Tac-Toe"),
+        "winner": MessageLookupByLibrary.simpleMessage("WON ")
       };
 }

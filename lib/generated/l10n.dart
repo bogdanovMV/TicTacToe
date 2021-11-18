@@ -59,6 +59,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Player turn `
+  String get prompt {
+    return Intl.message(
+      'Player turn ',
+      name: 'prompt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `WON `
+  String get winner {
+    return Intl.message(
+      'WON ',
+      name: 'winner',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
