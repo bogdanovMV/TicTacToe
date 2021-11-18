@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tic_tac_toe/shapes.dart';
+import 'package:tic_tac_toe/winner_line.dart';
 
 import 'field.dart';
 
@@ -16,11 +17,25 @@ class _TicTacToeState extends State<TicTacToe> {
   bool gameOver = false;
   bool moveX = true;
 
+  WinnerLine? _winnerLine;
+
+  void newGame() {
+    shapes = List<Shape?>.filled(9, null);
+    gameOver = false;
+    moveX = true;
+    _winnerLine = null;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.title),
+        actions: [
+          IconButton(
+              onPressed: newGame, icon: const Icon(Icons.autorenew_outlined))
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -36,37 +51,40 @@ class _TicTacToeState extends State<TicTacToe> {
               aspectRatio: 1,
               child: Padding(
                 padding: const EdgeInsets.all(32.0),
-                child: Stack(children: <Widget>[
-                  const Field(),
-                  if (shapes.isNotEmpty)
+                child: Stack(
+                  children: <Widget>[
+                    const Field(),
+                    if (shapes.isNotEmpty)
+                      GridView.count(
+                        crossAxisCount: 3,
+                        children: shapes
+                            .map((e) => (e != null)
+                                ? Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: e,
+                                  )
+                                : Container())
+                            .toList(),
+                      ),
                     GridView.count(
                       crossAxisCount: 3,
-                      children: shapes
-                          .map((e) => (e != null)
-                              ? Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: e,
-                                )
-                              : Container())
-                          .toList(),
-                    ),
-                  GridView.count(
-                    crossAxisCount: 3,
-                    children: List.generate(
-                      9,
-                      (index) => GestureDetector(
-                        onTap: () {
-                          if (checkAvailable(index)) {
-                            add(index);
-                            checkWin();
-                            moveX = !moveX;
-                          }
-                          setState(() {});
-                        },
+                      children: List.generate(
+                        9,
+                        (index) => GestureDetector(
+                          onTap: () {
+                            if (checkAvailable(index) && !gameOver) {
+                              add(index);
+                              checkWin();
+                              moveX = !moveX;
+                            }
+                            setState(() {});
+                          },
+                        ),
                       ),
                     ),
-                  )
-                ]),
+                    (gameOver ? _winnerLine! : Text(''))
+                  ],
+                ),
               ),
             ),
           ),
@@ -96,17 +114,34 @@ class _TicTacToeState extends State<TicTacToe> {
       }
     }
 
-    if ((indexes.contains(0) && indexes.contains(1) && indexes.contains(2)) ||
-        (indexes.contains(3) && indexes.contains(4) && indexes.contains(5)) ||
-        (indexes.contains(6) && indexes.contains(7) && indexes.contains(8)) ||
-        false ||
-        (indexes.contains(0) && indexes.contains(3) && indexes.contains(6)) ||
-        (indexes.contains(1) && indexes.contains(4) && indexes.contains(7)) ||
-        (indexes.contains(2) && indexes.contains(5) && indexes.contains(8)) ||
-        false ||
-        (indexes.contains(0) && indexes.contains(4) && indexes.contains(8)) ||
-        (indexes.contains(2) && indexes.contains(4) && indexes.contains(6))) {
+    if (indexes.contains(0) && indexes.contains(1) && indexes.contains(2)){
+      _winnerLine = const WinnerLine.top();
+    }
+    if (indexes.contains(3) && indexes.contains(4) && indexes.contains(5)){
+      _winnerLine = const WinnerLine.centerHorizontal();
+    }
+    if (indexes.contains(6) && indexes.contains(7) && indexes.contains(8)){
+      _winnerLine = const WinnerLine.bottom();
+    }
+    if (indexes.contains(0) && indexes.contains(3) && indexes.contains(6)){
+      _winnerLine = WinnerLine.left();
+    }
+    if (indexes.contains(1) && indexes.contains(4) && indexes.contains(7)){
+      _winnerLine = WinnerLine.centerVertical();
+    }
+    if (indexes.contains(2) && indexes.contains(5) && indexes.contains(8)){
+      _winnerLine = WinnerLine.right();
+    }
+    if (indexes.contains(0) && indexes.contains(4) && indexes.contains(8)){
+      _winnerLine = WinnerLine.leftTilt();
+    }
+    if (indexes.contains(2) && indexes.contains(4) && indexes.contains(6)){
+      _winnerLine = WinnerLine.rightTilt();
+    }
+
+    if (_winnerLine != null){
       gameOver = true;
     }
+
   }
 }
