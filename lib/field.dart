@@ -7,7 +7,7 @@ class Field extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       size: Size.infinite,
-      painter: FieldPainter(color: Theme.of(context).cardColor),
+      painter: FieldPainter(color: Theme.of(context).textTheme.bodyText2!.color!),
     );
   }
 }
@@ -26,6 +26,7 @@ class FieldPainter extends CustomPainter {
 
 
     final line = Paint()
+      ..strokeCap = StrokeCap.round
       ..color = color
       ..strokeWidth = 8
       ..style = PaintingStyle.stroke;

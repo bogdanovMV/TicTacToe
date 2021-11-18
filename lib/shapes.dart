@@ -16,18 +16,18 @@ class Shape extends StatelessWidget {
     return CustomPaint(
         size: Size.infinite,
         painter: (shape == SHAPE.x)
-            ? XPainter(color: color, index: index)
-            : OPainter(color: color, index: index));
+            ? _XPainter(color: color, index: index)
+            : _OPainter(color: color, index: index));
   }
 }
 
 abstract class _Shape extends CustomPainter {
   final Color color;
   final int index;
-  late final Paint line;
+  late final Paint _line;
 
   _Shape({required this.color, required this.index}) {
-    line = Paint()
+    _line = Paint()
       ..color = color
       ..strokeWidth = 8
       ..style = PaintingStyle.stroke;
@@ -37,41 +37,36 @@ abstract class _Shape extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter _) => false;
 }
 
-class OPainter extends _Shape {
-  OPainter({required Color color, required int index})
+class _OPainter extends _Shape {
+  _OPainter({required Color color, required int index})
       : super(color: color, index: index);
 
   @override
   void paint(Canvas canvas, Size size) {
-    final offsetWidth = size.width / 2;
-    final offsetHeight = size.height / 2;
-    final radius =
-        offsetWidth < offsetHeight ? size.width / 2.5 : size.height / 2.5;
-
+    final _radius = size.width / 2;
     canvas.drawCircle(
-      Offset(offsetWidth, offsetHeight),
-      radius,
-      line,
+      Offset(size.width / 2, size.width / 2),
+      _radius,
+      _line,
     );
   }
 }
 
-class XPainter extends _Shape {
-  XPainter({required Color color, required int index})
+class _XPainter extends _Shape {
+  _XPainter({required Color color, required int index})
       : super(color: color, index: index);
 
   @override
   void paint(Canvas canvas, Size size) {
     canvas.drawLine(
       Offset(0, 0),
-      Offset(size.width, size.height),
-      line,
+      Offset(size.width, size.width),
+      _line,
     );
-
     canvas.drawLine(
-      Offset(0, size.height),
+      Offset(0, size.width),
       Offset(size.width, 0),
-      line,
+      _line,
     );
   }
 }
