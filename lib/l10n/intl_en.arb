@@ -1,5 +1,6 @@
 {
   "title": "Tic-Tac-Toe",
   "prompt": "Player turn ",
-  "winner": "WON "
+  "winner": "WON ",
+  "draw": "DRAW"
 }

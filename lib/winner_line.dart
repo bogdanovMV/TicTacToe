@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 enum POSITION {
@@ -32,7 +34,7 @@ class WinnerLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color color = Theme.of(context).textTheme.bodyText2!.color!;
+    final Color color = Theme.of(context).appBarTheme.backgroundColor!;
     return CustomPaint(
       size: Size.infinite,
       painter: _WinnerLinePainter(_position, color),
@@ -51,7 +53,7 @@ class _WinnerLinePainter extends CustomPainter {
       ..color = color
       ..strokeWidth = 8
       ..style = PaintingStyle.stroke;
-    final double sx, sy, ex, ey;
+    double sx, sy, ex, ey;
     switch (position){
       case POSITION.top:
         sy = ey = size.width / 6;
@@ -92,6 +94,12 @@ class _WinnerLinePainter extends CustomPainter {
         ex = ey = size.width;
         break;
     }
+
+    sx += Random(2).nextInt(15);
+    sy += Random(12).nextInt(15);
+    ex += Random(85).nextInt(15);
+    ey += Random(06).nextInt(15);
+
     canvas.drawLine(
       Offset(sx, sy),
       Offset(ex, ey),

@@ -9,7 +9,7 @@ final kMainThemeLight = ThemeData.light().copyWith(
 final _kMainLightAppBarTheme = const AppBarTheme().copyWith(
   color: Colors.orange,
   titleTextStyle: const TextStyle(
-      fontSize: 40, color: Colors.white70, fontWeight: FontWeight.w900),
+      fontSize: 26, color: Colors.white70, fontWeight: FontWeight.w900),
   actionsIconTheme: const IconThemeData(color: Colors.orangeAccent),
   centerTitle: true,
 );
@@ -27,7 +27,7 @@ final kMainThemeDark = ThemeData.light().copyWith(
 final _kMainDarkAppBarTheme = const AppBarTheme().copyWith(
   color: Colors.deepPurple,
   titleTextStyle: const TextStyle(
-      fontSize: 40, color: Colors.purple, fontWeight: FontWeight.w900),
+      fontSize: 26, color: Colors.purple, fontWeight: FontWeight.w900),
   actionsIconTheme: const IconThemeData(color: Colors.deepPurpleAccent),
   centerTitle: true,
 );

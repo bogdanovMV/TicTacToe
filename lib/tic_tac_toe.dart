@@ -15,17 +15,10 @@ class TicTacToe extends StatefulWidget {
 class _TicTacToeState extends State<TicTacToe> {
   List<Shape?> shapes = List<Shape?>.filled(9, null);
   bool gameOver = false;
+  bool draw = false;
   bool moveX = true;
 
   WinnerLine? _winnerLine;
-
-  void newGame() {
-    shapes = List<Shape?>.filled(9, null);
-    gameOver = false;
-    moveX = true;
-    _winnerLine = null;
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,53 +30,60 @@ class _TicTacToeState extends State<TicTacToe> {
               onPressed: newGame, icon: const Icon(Icons.autorenew_outlined))
         ],
       ),
+      resizeToAvoidBottomInset: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(gameOver
-              ? AppLocalizations.of(context)!.winner + (moveX ? 'O' : 'X')
-              : AppLocalizations.of(context)!.prompt + (moveX ? 'X' : 'O')),
-          const SizedBox(
-            height: 40,
+          Padding(
+            padding: const EdgeInsets.only(top: 30, bottom: 60),
+            child: Text(gameOver
+                ? (draw
+                    ? AppLocalizations.of(context)!.draw
+                    : AppLocalizations.of(context)!.winner +
+                        (moveX ? 'O' : 'X') )
+                : AppLocalizations.of(context)!.prompt + (moveX ? 'X' : 'O')),
           ),
-          Center(
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: Stack(
-                  children: <Widget>[
-                    const Field(),
-                    if (shapes.isNotEmpty)
+          Expanded(
+            child: Center(
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Stack(
+                    children: <Widget>[
+                      const Field(),
+                      if (shapes.isNotEmpty)
+                        GridView.count(
+                          crossAxisCount: 3,
+                          children: shapes
+                              .map((e) => (e != null)
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: e,
+                                    )
+                                  : Container())
+                              .toList(),
+                        ),
                       GridView.count(
                         crossAxisCount: 3,
-                        children: shapes
-                            .map((e) => (e != null)
-                                ? Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: e,
-                                  )
-                                : Container())
-                            .toList(),
-                      ),
-                    GridView.count(
-                      crossAxisCount: 3,
-                      children: List.generate(
-                        9,
-                        (index) => GestureDetector(
-                          onTap: () {
-                            if (checkAvailable(index) && !gameOver) {
-                              add(index);
-                              checkWin();
-                              moveX = !moveX;
-                            }
-                            setState(() {});
-                          },
+                        children: List.generate(
+                          9,
+                          (index) => GestureDetector(
+                            onTap: () {
+                              tap(index);
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                    (gameOver ? _winnerLine! : Text(''))
-                  ],
+                      if (gameOver && !draw) _winnerLine!,
+                      if (gameOver) GestureDetector(
+                        onTap: (){
+                          newGame();
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -93,8 +93,26 @@ class _TicTacToeState extends State<TicTacToe> {
     );
   }
 
+  void newGame() {
+    shapes = List<Shape?>.filled(9, null);
+    draw = false;
+    gameOver = false;
+    moveX = true;
+    _winnerLine = null;
+    setState(() {});
+  }
+
   bool checkAvailable(int index) {
     return shapes[index] == null;
+  }
+
+  void tap(int index) {
+    if (checkAvailable(index) && !gameOver) {
+      add(index);
+      checkWin();
+      moveX = !moveX;
+    }
+    setState(() {});
   }
 
   void add(int index) {
@@ -114,34 +132,36 @@ class _TicTacToeState extends State<TicTacToe> {
       }
     }
 
-    if (indexes.contains(0) && indexes.contains(1) && indexes.contains(2)){
+    if (indexes.contains(0) && indexes.contains(1) && indexes.contains(2)) {
       _winnerLine = const WinnerLine.top();
     }
-    if (indexes.contains(3) && indexes.contains(4) && indexes.contains(5)){
+    if (indexes.contains(3) && indexes.contains(4) && indexes.contains(5)) {
       _winnerLine = const WinnerLine.centerHorizontal();
     }
-    if (indexes.contains(6) && indexes.contains(7) && indexes.contains(8)){
+    if (indexes.contains(6) && indexes.contains(7) && indexes.contains(8)) {
       _winnerLine = const WinnerLine.bottom();
     }
-    if (indexes.contains(0) && indexes.contains(3) && indexes.contains(6)){
-      _winnerLine = WinnerLine.left();
+    if (indexes.contains(0) && indexes.contains(3) && indexes.contains(6)) {
+      _winnerLine = const WinnerLine.left();
     }
-    if (indexes.contains(1) && indexes.contains(4) && indexes.contains(7)){
-      _winnerLine = WinnerLine.centerVertical();
+    if (indexes.contains(1) && indexes.contains(4) && indexes.contains(7)) {
+      _winnerLine = const WinnerLine.centerVertical();
     }
-    if (indexes.contains(2) && indexes.contains(5) && indexes.contains(8)){
-      _winnerLine = WinnerLine.right();
+    if (indexes.contains(2) && indexes.contains(5) && indexes.contains(8)) {
+      _winnerLine = const WinnerLine.right();
     }
-    if (indexes.contains(0) && indexes.contains(4) && indexes.contains(8)){
-      _winnerLine = WinnerLine.leftTilt();
+    if (indexes.contains(0) && indexes.contains(4) && indexes.contains(8)) {
+      _winnerLine = const WinnerLine.leftTilt();
     }
-    if (indexes.contains(2) && indexes.contains(4) && indexes.contains(6)){
-      _winnerLine = WinnerLine.rightTilt();
+    if (indexes.contains(2) && indexes.contains(4) && indexes.contains(6)) {
+      _winnerLine = const WinnerLine.rightTilt();
     }
 
-    if (_winnerLine != null){
+    if (_winnerLine != null) {
       gameOver = true;
+    } else if (!shapes.contains(null)) {
+      gameOver = true;
+      draw = true;
     }
-
   }
 }
