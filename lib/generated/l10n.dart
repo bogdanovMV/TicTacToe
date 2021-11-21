@@ -79,6 +79,16 @@ class S {
       args: [],
     );
   }
+
+  /// `DRAW`
+  String get draw {
+    return Intl.message(
+      'DRAW',
+      name: 'draw',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
