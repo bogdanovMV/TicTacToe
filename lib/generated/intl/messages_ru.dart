@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "ai": MessageLookupByLibrary.simpleMessage("ИИ"),
         "draw": MessageLookupByLibrary.simpleMessage("НИЧЬЯ"),
         "prompt": MessageLookupByLibrary.simpleMessage("Ход игрока "),
         "title": MessageLookupByLibrary.simpleMessage("Крестики-нолики"),

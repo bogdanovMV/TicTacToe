@@ -2,5 +2,6 @@
   "title": "Tic-Tac-Toe",
   "prompt": "Player turn ",
   "winner": "WON ",
-  "draw": "DRAW"
+  "draw": "DRAW",
+  "ai": "AI"
 }

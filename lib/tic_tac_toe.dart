@@ -4,6 +4,7 @@ import 'package:tic_tac_toe/shapes.dart';
 import 'package:tic_tac_toe/winner_line.dart';
 
 import 'field.dart';
+import 'ai.dart';
 
 class TicTacToe extends StatefulWidget {
   const TicTacToe({Key? key}) : super(key: key);
@@ -13,6 +14,9 @@ class TicTacToe extends StatefulWidget {
 }
 
 class _TicTacToeState extends State<TicTacToe> {
+  bool aiMode = false;
+  AI ai = AI();
+
   List<Shape?> shapes = List<Shape?>.filled(9, null);
   bool gameOver = false;
   bool draw = false;
@@ -24,10 +28,21 @@ class _TicTacToeState extends State<TicTacToe> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: newGame,
+          icon: const Icon(Icons.autorenew_outlined),
+        ),
         title: Text(AppLocalizations.of(context)!.title),
         actions: [
-          IconButton(
-              onPressed: newGame, icon: const Icon(Icons.autorenew_outlined))
+          Center(child: Text(AppLocalizations.of(context)!.ai)),
+          Switch(
+            inactiveThumbColor: Colors.grey,
+            value: aiMode,
+            onChanged: (on) {
+              aiMode = on;
+              newGame();
+            },
+          ),
         ],
       ),
       resizeToAvoidBottomInset: false,
@@ -41,7 +56,7 @@ class _TicTacToeState extends State<TicTacToe> {
                 ? (draw
                     ? AppLocalizations.of(context)!.draw
                     : AppLocalizations.of(context)!.winner +
-                        (moveX ? 'O' : 'X') )
+                        (moveX ? 'O' : 'X'))
                 : AppLocalizations.of(context)!.prompt + (moveX ? 'X' : 'O')),
           ),
           Expanded(
@@ -77,11 +92,12 @@ class _TicTacToeState extends State<TicTacToe> {
                         ),
                       ),
                       if (gameOver && !draw) _winnerLine!,
-                      if (gameOver) GestureDetector(
-                        onTap: (){
-                          newGame();
-                        },
-                      ),
+                      if (gameOver)
+                        GestureDetector(
+                          onTap: () {
+                            newGame();
+                          },
+                        ),
                     ],
                   ),
                 ),
@@ -94,6 +110,7 @@ class _TicTacToeState extends State<TicTacToe> {
   }
 
   void newGame() {
+    ai = AI();
     shapes = List<Shape?>.filled(9, null);
     draw = false;
     gameOver = false;
@@ -111,6 +128,10 @@ class _TicTacToeState extends State<TicTacToe> {
       add(index);
       checkWin();
       moveX = !moveX;
+    }
+    if (aiMode && !moveX && !gameOver){
+      int _nextIndex = ai.getNextIndex(index);
+      tap(_nextIndex);
     }
     setState(() {});
   }
