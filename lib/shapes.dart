@@ -28,6 +28,7 @@ abstract class _Shape extends CustomPainter {
 
   _Shape({required this.color, required this.index}) {
     _line = Paint()
+      ..strokeCap = StrokeCap.round
       ..color = color
       ..strokeWidth = 8
       ..style = PaintingStyle.stroke;
