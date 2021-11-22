@@ -106,7 +106,71 @@ class AI {
         availableMoves.add(i);
       }
     }
+    // is there an opportunity to win
+    int index = checkInLoop(_selfMoves, availableMoves);
+    if (index == -1){
+      // is it possible to prevent loss
+      index = checkInLoop(_userMoves, availableMoves);
+    }
+
+
+    if (index != -1){
+      return index;
+    }
+
     availableMoves.shuffle();
     return availableMoves.first;
+  }
+
+  int checkInLoop(moves, availableMoves){
+    for (var index in availableMoves) {
+      if (index % 2 != 0) {
+        // side
+        if ([3, 5].contains(index)) {
+          if (moves.contains(index - 3) &&
+              moves.contains(index + 3)) {
+            return index;
+          } else if (moves.contains(15 ~/ index) &&
+              moves.contains(4)) {
+            return index;
+          }
+        } else if ([1, 7].contains(index)) {
+          if (moves.contains(index - 1) &&
+              moves.contains(index + 1)) {
+            return index;
+          } else if (moves.contains(7 ~/ index) &&
+              moves.contains(4)) {
+            return index;
+          }
+        }
+      } else {
+        // angles
+        if (moves.contains(8 - index) && moves.contains(4)) {
+          // diagonal
+          return index;
+        }
+        // horizontal
+        if ([0, 6].contains(index) &&
+            moves.contains(index + 1) &&
+            moves.contains(index + 2)) {
+          return index;
+        } else if ([2, 8].contains(index) &&
+            moves.contains(index - 1) &&
+            moves.contains(index - 2)) {
+          return index;
+        }
+        // vertical
+        if ([0, 2].contains(index) &&
+            moves.contains(index + 3) &&
+            moves.contains(index + 6)) {
+          return index;
+        } else if ([6, 8].contains(index) &&
+            moves.contains(index - 3) &&
+            moves.contains(index - 6)) {
+          return index;
+        }
+      }
+    }
+    return -1;
   }
 }
