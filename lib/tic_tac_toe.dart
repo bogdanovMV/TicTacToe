@@ -133,20 +133,22 @@ class _TicTacToeState extends State<TicTacToe> {
     if (aiMode && moveX) {
       move(index);
       moveX = false;
-      Timer(Duration(milliseconds: 1500), () {
-        if (!gameOver){
-          int _nextIndex = ai.getNextIndex(index);
-          move(_nextIndex);
-          moveX = true;
-        }
-      });
+      if (!gameOver) {
+        Timer(
+          Duration(milliseconds: 1500),
+          () {
+            int _nextIndex = ai.getNextIndex(index);
+            move(_nextIndex);
+            moveX = true;
+          },
+        );
+      }
     }
 
-    if (!aiMode){
+    if (!aiMode) {
       move(index);
       moveX = !moveX;
     }
-
   }
 
   void move(int index) {
