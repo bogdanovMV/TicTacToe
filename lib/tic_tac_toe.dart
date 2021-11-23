@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tic_tac_toe/shapes.dart';
+import 'package:tic_tac_toe/themes.dart';
 import 'package:tic_tac_toe/winner_line.dart';
 
 import 'field.dart';
@@ -138,9 +139,9 @@ class _TicTacToeState extends State<TicTacToe> {
 
   void add(int index) {
     if (moveX) {
-      shapes[index] = Shape(shape: SHAPE.x, index: index, color: Colors.red);
+      shapes[index] = Shape(shape: SHAPE.x, index: index, color: ColorsShape.colorX);
     } else {
-      shapes[index] = Shape(shape: SHAPE.o, index: index, color: Colors.green);
+      shapes[index] = Shape(shape: SHAPE.o, index: index, color: ColorsShape.colorO);
     }
   }
 

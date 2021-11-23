@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'colors.dart';
 
+class ColorsShape {
+  static const Color colorX = Color(0xFFF51414);
+  static const Color colorO = Color(0xFF95E30B);
+}
+
 final kMainThemeLight = ThemeData(
   scaffoldBackgroundColor: lightPrimary,
   primaryColor: lightPrimary,
