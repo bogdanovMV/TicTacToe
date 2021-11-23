@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tic_tac_toe/shapes.dart';
@@ -125,23 +127,41 @@ class _TicTacToeState extends State<TicTacToe> {
   }
 
   void tap(int index) {
-    if (checkAvailable(index) && !gameOver) {
-      add(index);
-      checkWin();
+    if (!checkAvailable(index) || gameOver) {
+      return;
+    }
+    if (aiMode && moveX) {
+      move(index);
+      moveX = false;
+      Timer(Duration(milliseconds: 1500), () {
+        if (!gameOver){
+          int _nextIndex = ai.getNextIndex(index);
+          move(_nextIndex);
+          moveX = true;
+        }
+      });
+    }
+
+    if (!aiMode){
+      move(index);
       moveX = !moveX;
     }
-    if (aiMode && !moveX && !gameOver){
-      int _nextIndex = ai.getNextIndex(index);
-      tap(_nextIndex);
-    }
+
+  }
+
+  void move(int index) {
+    add(index);
+    checkWin();
     setState(() {});
   }
 
   void add(int index) {
     if (moveX) {
-      shapes[index] = Shape(shape: SHAPE.x, index: index, color: ColorsShape.colorX);
+      shapes[index] =
+          Shape(shape: SHAPE.x, index: index, color: ColorsShape.colorX);
     } else {
-      shapes[index] = Shape(shape: SHAPE.o, index: index, color: ColorsShape.colorO);
+      shapes[index] =
+          Shape(shape: SHAPE.o, index: index, color: ColorsShape.colorO);
     }
   }
 
