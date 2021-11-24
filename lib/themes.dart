@@ -12,9 +12,8 @@ final kMainThemeLight = ThemeData(
   appBarTheme: const AppBarTheme(
     color: lightAdditional,
     titleTextStyle: TextStyle(
-        fontSize: 26, color: lightAccent, fontWeight: FontWeight.w900),
+        fontSize: 20, color: lightAccent, fontWeight: FontWeight.w900),
     foregroundColor: lightPrimary,
-    centerTitle: true,
   ),
   textTheme: const TextTheme(
     bodyText2: TextStyle(
@@ -29,9 +28,8 @@ final kMainThemeDark = ThemeData(
   appBarTheme: const AppBarTheme(
     color: darkAdditional,
     titleTextStyle:
-        TextStyle(fontSize: 26, color: darkAccent, fontWeight: FontWeight.w900),
+        TextStyle(fontSize: 20, color: darkAccent, fontWeight: FontWeight.w900),
     foregroundColor: darkPrimary,
-    centerTitle: true,
   ),
   textTheme: const TextTheme(
     bodyText2: TextStyle(
